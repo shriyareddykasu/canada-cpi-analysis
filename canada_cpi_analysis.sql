@@ -19,3 +19,54 @@ FROM cpi_data
 WHERE product_group != 'All-items'
 GROUP BY product_group
 ORDER BY total_increase DESC;
+
+
+-- ================================================
+-- QUERY 2: Year-by-year CPI for Food and Shelter
+-- How did the two biggest household costs trend over time?
+-- ================================================
+
+SELECT 
+    YEAR(STR_TO_DATE(CONCAT('01 ', month_year), '%d %M %Y')) AS year,
+    product_group,
+    ROUND(AVG(cpi_value), 2) AS avg_annual_cpi
+FROM cpi_data
+WHERE product_group IN ('Food', 'Shelter')
+GROUP BY year, product_group
+ORDER BY year, product_group;
+
+
+-- ================================================
+-- QUERY 3: Which year had the highest inflation spike?
+-- Finding the peak crisis year
+-- ================================================
+
+SELECT 
+    YEAR(STR_TO_DATE(CONCAT('01 ', month_year), '%d %M %Y')) AS year,
+    ROUND(AVG(cpi_value), 2) AS avg_cpi,
+    ROUND(AVG(cpi_value) - LAG(AVG(cpi_value)) 
+        OVER (ORDER BY YEAR(STR_TO_DATE(CONCAT('01 ', month_year), '%d %M %Y'))), 2) AS yoy_change
+FROM cpi_data
+WHERE product_group = 'All-items'
+GROUP BY year
+ORDER BY year;
+
+
+-- ================================================
+-- QUERY 4: Pre-pandemic vs post-pandemic comparison
+-- How much more expensive is life in 2024 vs 2019?
+-- ================================================
+
+SELECT 
+    product_group,
+    ROUND(AVG(CASE WHEN month_year LIKE '%2019%' THEN cpi_value END), 2) AS avg_cpi_2019,
+    ROUND(AVG(CASE WHEN month_year LIKE '%2024%' THEN cpi_value END), 2) AS avg_cpi_2024,
+    ROUND(AVG(CASE WHEN month_year LIKE '%2024%' THEN cpi_value END) - 
+          AVG(CASE WHEN month_year LIKE '%2019%' THEN cpi_value END), 2) AS difference,
+    ROUND((AVG(CASE WHEN month_year LIKE '%2024%' THEN cpi_value END) - 
+           AVG(CASE WHEN month_year LIKE '%2019%' THEN cpi_value END)) / 
+           AVG(CASE WHEN month_year LIKE '%2019%' THEN cpi_value END) * 100, 2) AS pct_increase
+FROM cpi_data
+WHERE product_group NOT IN ('All-items', 'All-items excluding energy', 'All-items excluding food and energy')
+GROUP BY product_group
+ORDER BY pct_increase DESC;
