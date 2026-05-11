@@ -41,6 +41,12 @@ collapse and record Bank of Canada rate hikes.
 Clothing and footwear fell 2.86% — the only deflationary category, 
 driven by global competition and fast fashion supply chains.
 
+### 5. 2022 Inflation Was Relentless — No Relief Month
+CPI climbed almost every month throughout 2022, rising from 145.3 in 
+January to a peak of 154.0 in November — an 8.7 point increase with 
+no meaningful relief. This sustained pressure forced the Bank of Canada 
+to implement aggressive consecutive rate hikes throughout the year.
+
 ## Business Recommendation
 Banks and fintechs should prioritise financial wellness tools targeting 
 Food and Shelter budgeting for Canadian households, as these two categories 
