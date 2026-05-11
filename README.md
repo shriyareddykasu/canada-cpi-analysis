@@ -47,6 +47,13 @@ January to a peak of 154.0 in November — an 8.7 point increase with
 no meaningful relief. This sustained pressure forced the Bank of Canada 
 to implement aggressive consecutive rate hikes throughout the year.
 
+### 6. Rate Hikes Cooled Energy but Failed on Shelter
+Post-2022, Gasoline dropped 18.85 points and Energy dropped 8.94 points — 
+responding to Bank of Canada rate hikes. However Shelter costs accelerated, 
+rising 9.78 points in 2023-24 — faster than the crisis year itself. This 
+signals Canada's housing affordability problem is structural and cannot be 
+solved by monetary policy alone.
+
 ## Business Recommendation
 Banks and fintechs should prioritise financial wellness tools targeting 
 Food and Shelter budgeting for Canadian households, as these two categories 
