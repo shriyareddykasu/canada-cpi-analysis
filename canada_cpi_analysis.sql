@@ -70,3 +70,75 @@ FROM cpi_data
 WHERE product_group NOT IN ('All-items', 'All-items excluding energy', 'All-items excluding food and energy')
 GROUP BY product_group
 ORDER BY pct_increase DESC;
+
+-- ================================================
+-- QUERY 5: Monthly CPI trend during peak crisis (2022)
+-- Which months in 2022 were the most severe?
+-- ================================================
+
+SELECT 
+    month_year,
+    product_group,
+    cpi_value
+FROM cpi_data
+WHERE product_group = 'All-items'
+  AND month_year LIKE '%2022%'
+ORDER BY STR_TO_DATE(CONCAT('01 ', month_year), '%d %M %Y');
+
+-- ================================================
+-- QUERY 6: Which categories recovered after 2022 
+-- and which kept rising?
+-- ================================================
+
+SELECT 
+    product_group,
+    ROUND(AVG(CASE WHEN month_year LIKE '%2022%' THEN cpi_value END), 2) AS avg_cpi_2022,
+    ROUND(AVG(CASE WHEN month_year LIKE '%2023%' THEN cpi_value END), 2) AS avg_cpi_2023,
+    ROUND(AVG(CASE WHEN month_year LIKE '%2024%' THEN cpi_value END), 2) AS avg_cpi_2024,
+    ROUND(AVG(CASE WHEN month_year LIKE '%2023%' THEN cpi_value END) - 
+          AVG(CASE WHEN month_year LIKE '%2022%' THEN cpi_value END), 2) AS change_22_to_23,
+    ROUND(AVG(CASE WHEN month_year LIKE '%2024%' THEN cpi_value END) - 
+          AVG(CASE WHEN month_year LIKE '%2023%' THEN cpi_value END), 2) AS change_23_to_24
+FROM cpi_data
+WHERE product_group NOT IN ('All-items', 'All-items excluding energy', 'All-items excluding food and energy')
+GROUP BY product_group
+ORDER BY change_22_to_23 DESC;
+
+-- ================================================
+-- QUERY 7: Ranking categories by CPI using 
+-- window functions
+-- Which category ranks highest each year?
+-- ================================================
+
+SELECT 
+    year,
+    product_group,
+    avg_cpi,
+    RANK() OVER (PARTITION BY year ORDER BY avg_cpi DESC) AS cpi_rank
+FROM (
+    SELECT 
+        YEAR(STR_TO_DATE(CONCAT('01 ', month_year), '%d %M %Y')) AS year,
+        product_group,
+        ROUND(AVG(cpi_value), 2) AS avg_cpi
+    FROM cpi_data
+    WHERE product_group NOT IN ('All-items', 'All-items excluding energy', 
+          'All-items excluding food and energy')
+    GROUP BY year, product_group
+) AS yearly_avg
+ORDER BY year, cpi_rank;
+
+-- ================================================
+-- QUERY 8: 3-month rolling average CPI for Food
+-- Smoothing the trend to remove monthly noise
+-- ================================================
+
+SELECT 
+    month_year,
+    cpi_value,
+    ROUND(AVG(cpi_value) OVER (
+        ORDER BY STR_TO_DATE(CONCAT('01 ', month_year), '%d %M %Y')
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ), 2) AS rolling_3month_avg
+FROM cpi_data
+WHERE product_group = 'Food'
+ORDER BY STR_TO_DATE(CONCAT('01 ', month_year), '%d %M %Y');
