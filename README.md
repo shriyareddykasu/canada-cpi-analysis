@@ -4,10 +4,6 @@
 This project analyses Canada's Consumer Price Index (CPI) data from 
 January 2019 to March 2026 to identify which expense categories impacted 
 Canadian households the most during the affordability crisis.
-## Dashboard
-🔗 [View Live Power BI Dashboard](https://app.powerbi.com/view?r=eyJrIjoiODI0YmM3MDMtN2VjZi00YzdjLWEzNjktNzlmNDc5YTk0ZGE1IiwidCI6ImM2ZTU0OWIzLTVmNDUtNDAzMi1hYWU5LWQ0MjQ0ZGM1YjJjNCJ9)
-
-![Dashboard Preview](dashboard.png)
 
 **What is CPI?** The Consumer Price Index measures how much everyday costs 
 have changed over time compared to a base year (2002 = 100). A CPI of 200 
@@ -20,6 +16,7 @@ and 2026, and what do the trends tell us about the cost of living crisis?
 ## Tools Used
 - MySQL — data analysis and querying
 - Python (Pandas) — data cleaning
+- Power BI — interactive dashboard
 - Data Source: Statistics Canada (Official Government Data)
 
 ## Dataset
@@ -100,6 +97,11 @@ and show no signs of reverting. Products such as smart budgeting alerts,
 grocery spend tracking, and rent affordability calculators would directly 
 address the pain points this data reveals.
 
+## Dashboard
+🔗 [View Live Power BI Dashboard](https://app.powerbi.com/view?r=eyJrIjoiODI0YmM3MDMtN2VjZi00YzdjLWEzNjktNzlmNDc5YTk0ZGE1IiwidCI6ImM2ZTU0OWIzLTVmNDUtNDAzMi1hYWU5LWQ0MjQ0ZGM1YjJjNCJ9)
+
+![Dashboard Preview](dashboard.png)
+
 ## SQL Techniques Used
 - Aggregate functions: SUM, AVG, MIN, MAX, COUNT
 - Filtering: WHERE, CASE WHEN, LIKE
@@ -118,4 +120,4 @@ address the pain points this data reveals.
 
 ## Status
 ✅ Complete — SQL analysis done (9 queries)
-🔄 Coming soon — Power BI dashboard
+✅ Complete — Power BI dashboard live
