@@ -117,6 +117,8 @@ address the pain points this data reveals.
 | `cpi_clean.csv` | Cleaned and reshaped data |
 | `cleaning cpi data.ipynb` | Python data cleaning notebook |
 | `canada_cpi_analysis.sql` | SQL analysis queries with comments |
+| `canada_cpi_dashboard.pbix` | Power BI dashboard file |
+| `dashboard.png` | Dashboard preview screenshot |
 
 ## Status
 ✅ Complete — SQL analysis done (9 queries)
