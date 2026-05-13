@@ -103,3 +103,42 @@ FROM cpi_data
 WHERE product_group NOT IN ('All-items', 'All-items excluding energy', 'All-items excluding food and energy')
 GROUP BY product_group
 ORDER BY change_22_to_23 DESC;
+
+-- ================================================
+-- QUERY 7: Ranking categories by CPI using 
+-- window functions
+-- Which category ranks highest each year?
+-- ================================================
+
+SELECT 
+    year,
+    product_group,
+    avg_cpi,
+    RANK() OVER (PARTITION BY year ORDER BY avg_cpi DESC) AS cpi_rank
+FROM (
+    SELECT 
+        YEAR(STR_TO_DATE(CONCAT('01 ', month_year), '%d %M %Y')) AS year,
+        product_group,
+        ROUND(AVG(cpi_value), 2) AS avg_cpi
+    FROM cpi_data
+    WHERE product_group NOT IN ('All-items', 'All-items excluding energy', 
+          'All-items excluding food and energy')
+    GROUP BY year, product_group
+) AS yearly_avg
+ORDER BY year, cpi_rank;
+
+-- ================================================
+-- QUERY 8: 3-month rolling average CPI for Food
+-- Smoothing the trend to remove monthly noise
+-- ================================================
+
+SELECT 
+    month_year,
+    cpi_value,
+    ROUND(AVG(cpi_value) OVER (
+        ORDER BY STR_TO_DATE(CONCAT('01 ', month_year), '%d %M %Y')
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ), 2) AS rolling_3month_avg
+FROM cpi_data
+WHERE product_group = 'Food'
+ORDER BY STR_TO_DATE(CONCAT('01 ', month_year), '%d %M %Y');
